@@ -49,3 +49,17 @@ func WriteExcel(filePath string, content [][]string) error {
 func UpdateExcel(filePath string, content map[string]string) error {
 	return nil
 }
+
+func ReadExcel(filePath string, sheetName string) (content [][]string, err error) {
+	file, err := excelize.OpenFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		// Close the spreadsheet.
+		if err := file.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
+	return file.GetRows(sheetName)
+}
