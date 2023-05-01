@@ -13,3 +13,7 @@ func TestMkdir(t *testing.T) {
 		log.Println(err)
 	}
 }
+
+func TestIsNotExist(t *testing.T) {
+	println(IsNotExist(testPath))
+}
