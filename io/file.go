@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"log"
 	"os"
-	"path"
 	"strings"
 )
 
@@ -33,12 +32,8 @@ func ReadFile(filePath string) (ret []string, err error) {
 }
 
 func WriteFile(filePath string, content []string) (err error) {
-	dir := path.Dir(filePath)
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err := os.MkdirAll(dir, os.ModePerm)
-		if err != nil {
-			return err
-		}
+	if err := Mkdir(filePath); err != nil {
+		return err
 	}
 	file, err := os.Create(filePath)
 	if err != nil {
