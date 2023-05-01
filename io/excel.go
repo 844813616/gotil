@@ -63,13 +63,23 @@ func ReadExcel(filePath string, sheetName string) (content [][]string, err error
 	return file.GetRows(sheetName)
 }
 
-func UpdateExcel(file *excelize.File, sheetName string, cellNames []string, calAreas []Area, processor func(in [][][]string) string) error {
+func UpdateExcel(fileName, sheetName string, area Area, calAreas []Area, processor func(in [][][]string) string) error {
+	file, err := excelize.OpenFile(fileName)
+	if err != nil {
+		return err
+	}
+	defer func(file *excelize.File) {
+		err := file.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(file)
 	index, err := file.GetSheetIndex(sheetName)
 	if err != nil {
 		return err
 	}
 	file.SetActiveSheet(index)
-	for _, cellName := range cellNames {
+	for _, cellName := range area.ToCellNameList("") {
 		var in [][][]string
 		for _, calAreas := range calAreas {
 			cellNameArray := calAreas.ToCellNameArray(cellName)
