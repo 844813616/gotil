@@ -23,3 +23,14 @@ func TestWriteFile(t *testing.T) {
 		log.Println(err)
 	}
 }
+
+func TestOpenFile(t *testing.T) {
+	file, err := OpenFile(testFilePath, READ)
+	if err != nil {
+		return
+	}
+	err = file.Close()
+	if err != nil {
+		return
+	}
+}
