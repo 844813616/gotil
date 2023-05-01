@@ -1,7 +1,6 @@
 package io
 
 import (
-	"github.com/xuri/excelize/v2"
 	"log"
 	"testing"
 )
@@ -43,17 +42,8 @@ func TestUpdateExcel(t *testing.T) {
 		}
 		return ""
 	}
-	file, err := excelize.OpenFile(testExcelPath)
-	if err != nil {
-		return
-	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Println(err)
-		}
-	}()
-	err = UpdateExcel(file, defaultSheetName,
-		[]string{"D1", "D2"},
+	err := UpdateExcel(testExcelPath, defaultSheetName,
+		Area{Coordinate{Absolute(1), Absolute(4)}, Coordinate{Absolute(3), Absolute(4)}},
 		[]Area{
 			{Coordinate{Absolute(1), Absolute(1)}, Coordinate{Absolute(3), Absolute(1)}},
 			{Coordinate{Absolute(1), Absolute(2)}, Coordinate{Absolute(1), Absolute(3)}},
