@@ -2,9 +2,19 @@ package io
 
 import (
 	"bufio"
+	"errors"
 	"log"
 	"os"
 	"strings"
+)
+
+type PermType int
+
+const (
+	READ PermType = iota
+	WRITE
+	REWRITE
+	APPEND
 )
 
 func ReadFile(filePath string) (ret []string, err error) {
@@ -56,4 +66,22 @@ func WriteFile(filePath string, content []string) (err error) {
 		return err
 	}
 	return nil
+}
+
+func OpenFile(filePath string, permType PermType) (*os.File, error) {
+	switch permType {
+	case READ:
+		return os.Open(filePath)
+	case APPEND:
+		return os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	case WRITE:
+		if err := Mkdir(filePath); err != nil {
+			return nil, err
+		}
+		return os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+	case REWRITE:
+		return os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+	default:
+		return nil, errors.New("error type of permType")
+	}
 }
