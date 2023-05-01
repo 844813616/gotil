@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var testPath = "../temp/path_test"
+var testPath = "../temp/path_test.test"
 
 func TestMkdir(t *testing.T) {
 	err := Mkdir(testPath)
