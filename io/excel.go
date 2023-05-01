@@ -1,13 +1,16 @@
 package io
 
 import (
+	"encoding/xml"
 	"github.com/xuri/excelize/v2"
 	"log"
 )
 
 var (
-	defaultSheetName = "sheet1"
-	defaultCell      = "A1"
+	defaultSheetName           = "sheet1"
+	defaultCell                = "A1"
+	defaultXMLPathDocPropsCore = "docProps/core.xml"
+	templateDocpropsCore       = `<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:creator>weiguanqun</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">2006-09-16T00:00:00Z</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">2006-09-16T00:00:00Z</dcterms:modified></cp:coreProperties>`
 )
 
 func WriteExcel(filePath string, content [][]string) error {
@@ -15,6 +18,7 @@ func WriteExcel(filePath string, content [][]string) error {
 		return err
 	}
 	file := excelize.NewFile()
+	file.Pkg.Store(defaultXMLPathDocPropsCore, []byte(xml.Header+templateDocpropsCore))
 	defer func() {
 		if err := file.Close(); err != nil {
 			log.Println(err)
