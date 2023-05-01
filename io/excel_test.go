@@ -13,3 +13,16 @@ func TestWriteExcel(t *testing.T) {
 		log.Println(err)
 	}
 }
+
+func TestReadExcel(t *testing.T) {
+	content, err := ReadExcel(testExcelPath, defaultSheetName)
+	if err != nil {
+		log.Println(err)
+	}
+	for _, row := range content {
+		for _, cell := range row {
+			print(cell + " ")
+		}
+		println()
+	}
+}
